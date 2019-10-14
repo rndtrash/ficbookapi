@@ -1,0 +1,6 @@
+site_name: Ficbook Api
+theme: readthedocs
+extra:
+  font:
+    text: 'Roboto'
+    code: 'Roboto Mono'

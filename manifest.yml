@@ -1,0 +1,7 @@
+---
+applications:
+- name: ficbookapi
+  host: ficbookapi
+  memory: 256M
+  instances: 1
+  path: .
