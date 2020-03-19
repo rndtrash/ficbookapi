@@ -6,7 +6,7 @@ ficListByTagPath = "tags"
 ficPath = "readfic"
 
 version = "0.1a"
-port = int(os.getenv('VCAP_APP_PORT', 3001))
+port = int(os.getenv('VCAP_APP_PORT', os.getenv('PORT', 8080)))
 host = os.getenv('VCAP_APP_HOST', 'localhost')
 
 threads = 16
