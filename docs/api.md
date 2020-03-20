@@ -11,16 +11,15 @@
     /get/fanfics
 ###### Аргументы
 
-- `category` - категория.
-- `fandom` - фандом.
-- `tag` - тэг.
+- `fandoms` - фандомы.
+- `tags` - тэги.
 - `page` - номер страницы. *По-умолчанию первая*.
 - `direction` - направление.
 - `rating` - рэйтинг.
 - `size` - размер фанфика.
 - `limit` - сколько фанфиков необходимо получить (лимит - 20).
 - `scope` - список скоупов.
-**Примечание:** аргументы `category` и `fandom` обязательны если не дан аргумент `tag`.
+**Примечание:** поиск работает только тогда, когда дан хотя бы один из данных аргументов: `fandoms`, `tags`.
 
 ###### Скоупы
 
@@ -32,7 +31,7 @@
 
 В ответ мы получаем JSON объект:
 ```javascript
-// localhost:3001/get/fanfics?tag=1337228&page=1&scope=title,author,description
+// localhost:8080/get/fanfics?tags=1337228,2281337&page=1&scope=title,author,description
 {
     "fanfics": {
         "0": {
@@ -71,7 +70,7 @@
 
 Пример вывода, если фанфик состоит только из одной страницы:
 ```javascript
-// localhost:3001/get/fanfic?id=1241421341243&scope=title,author,description,page_title
+// localhost:8080/get/fanfic?id=1241421341243&scope=title,author,description,page_title
 {
     "author": "23414124134",
     "description": "ставь лайк если любишь маму",
@@ -82,7 +81,7 @@
 
 Пример вывода, если фанфик состоит из нескольких страниц, но страница не указана:
 ```javascript
-// localhost:3001/get/fanfic?id=2132412341&scope=title,author,description,page_title
+// localhost:8080/get/fanfic?id=2132412341&scope=title,author,description,page_title
 {
     "author": "341234141",
     "description": "Фанфик, под который удобно ебать чугун.",
@@ -101,7 +100,7 @@
 ```
 Пример вывода, если фанфик состоит из нескольких страниц, а также указан ID страницы:
 ```javascript
-// localhost:3001/get/fanfic?id=1241421341243&page=12412413412&scope=title,author,description,page_title
+// localhost:8080/get/fanfic?id=1241421341243&page=12412413412&scope=title,author,description,page_title
 {
     "author": "341234141",
     "description": "Фанфик, под который удобно ебать чугун.",
