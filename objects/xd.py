@@ -7,7 +7,7 @@ ficPath = "readfic"
 
 version = "0.1a"
 port = int(os.getenv('VCAP_APP_PORT', os.getenv('PORT', 8080)))
-host = os.getenv('VCAP_APP_HOST', 'localhost')
+host = os.getenv('VCAP_APP_HOST', '127.0.0.1')
 
 threads = 16
 requests = 0
