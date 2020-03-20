@@ -1,8 +1,7 @@
 import os
 
 sitePath = "ficbook.net"
-ficListByCategoryPath = "fanfiction"
-ficListByTagPath = "tags"
+ficFindPath = "find"
 ficPath = "readfic"
 
 version = "0.1a"

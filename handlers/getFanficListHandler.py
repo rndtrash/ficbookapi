@@ -8,9 +8,7 @@ from bottle import route, request, response
 import json
 import time
 
-ficCategoryPageSnippet = "http://{}/{}/{}/{}?p={}&filterDirection={}&rating={}&size={}"
-ficTagPageSnippet = "http://{}/{}/{}?p={}&filterDirection={}&rating={}&size={}"
-#TODO: лучше это сделать через /find?...
+ficFindPageSnipper = "http://{}/{}?p={}{}{}&filterDirection={}&rating={}&size={}&find=Найти!"
 
 @route("/get/fanfics", method="GET")
 def handler():
@@ -18,18 +16,10 @@ def handler():
 		requestID = xd.requests + 1
 		xd.requests += 1
 		print("[{}] Working on {}'s request...".format(requestID, request.environ.get('REMOTE_ADDR')))
-		
-		categoryId = request.query.category
-		if not categoryId:
-			categoryId = ""
 			
-		fandomId = request.query.fandom
-		if not fandomId:
-			fandomId = ""
+		fandomIds = request.query.fandoms
 		
-		tagId = request.query.tag
-		if not tagId:
-			tagId = 0
+		tagIds = request.query.tags
 			
 		pageId = request.query.page
 		if not pageId:
@@ -55,20 +45,24 @@ def handler():
 		
 		limit = request.query.limit
 		if not limit:
-			limit = 0 
+			limit = 0
 		else:
 			limit = int(limit)
 		
 		scopes = request.query.scope
 		
-		if (tagId == 0 and categoryId == "" and fandomId == ""):
-			return pretty({"error": {"message": "Please set either category and fandom or tag ID"}})
+		if (len(tagIds) == 0 and len(fandomIds) == 0):
+			return pretty({"error": {"message": "Please set fandoms or tags"}})
+		
+		fandomsString = ""
+		for x in fandomIds.split(','):
+			fandomsString += "&fandom_ids[]={}".format(x)
 
-		url = None
-		if (tagId == 0):
-			url = ficCategoryPageSnippet.format(xd.sitePath, xd.ficListByCategoryPath, categoryId, fandomId, pageId, direction, rating, size)
-		elif (categoryId == "" and fandomId == ""):
-			url = ficTagPageSnippet.format(xd.sitePath, xd.ficListByTagPath, tagId, pageId, direction, rating, size)
+		tagsString = ""
+		for x in tagIds.split(','):
+			tagsString += "&tags_include[]={}".format(x)
+		
+		url = ficFindPageSnipper.format(xd.sitePath, xd.ficFindPath, pageId, fandomsString, tagsString, direction, rating, size)
 		
 		page = requests.get(url)
 
