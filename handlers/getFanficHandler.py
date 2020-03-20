@@ -47,13 +47,15 @@ def handler():
 
 		print("[{}] Cheking for thread here...".format(requestID))
 
-		notFound = soup.find_all(name="h1",text="404 — Страница не найдена")
-
 		response.content_type='application/json; charset=UTF-8'
 
-		if (notFound):
+		if (soup.find_all(name="h1",text="404 — Страница не найдена")):
 			print("[{}] Page is not found! Aborting...".format(requestID))
 			return pretty({"error": {"message": "Fanfic or page is not found"}})
+		
+		if (soup.find_all(name="h1",text="500 — Ошибка на сервере")):
+			print("[{}] Unknown error! Aborting...".format(requestID))
+			return pretty({"error": {"message": "Unknown error"}})
 
 		# Объект для ответа
 		result = {}

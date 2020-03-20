@@ -33,7 +33,9 @@ def handler():
 			
 		pageId = request.query.page
 		if not pageId:
-			pageId = 0
+			pageId = 1
+		if pageId < 1:
+			pageId = 1
 		
 		direction = request.query.direction
 		if not direction:
@@ -77,14 +79,15 @@ def handler():
 
 		print("[{}] Cheking for thread here...".format(requestID))
 
-		notFound = soup.find_all(name="h1",text="404 — Страница не найдена")
-
-		#божеупоси
 		response.content_type='application/json; charset=UTF-8'
 
-		if (notFound):
+		if (soup.find_all(name="h1",text="404 — Страница не найдена")):
 			print("[{}] Page is not found! Aborting...".format(requestID))
 			return pretty({"error": {"message": "Category or fandom is not found"}})
+		
+		if (soup.find_all(name="h1",text="500 — Ошибка на сервере")):
+			print("[{}] Unknown error! Aborting...".format(requestID))
+			return pretty({"error": {"message": "Unknown error"}})
 
 		# Отсеиваем блоки фанфиков
 		parsedFic = soup.find_all(name="article")
