@@ -34,15 +34,15 @@
 ```javascript
 // localhost:8080/get/fanfics?tags=1337228,2281337&page=1&scope=title,author,description
 {
-    "fanfics": {
-        "0": {
-            "author": "126536518723598158",
+    "fanfics": [
+        {
+            "author": 126536518723598158,
             "description": "Анек про медведя и машину.",
-            "id": "58736595178903519875487",
+            "id": 58736595178903519875487,
             "title": "Горячий медведь"
         },
 		...
-	}
+	]
 }
 ```
 ### /get/fanfic

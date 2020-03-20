@@ -103,7 +103,7 @@ def handler():
 
 		# Счетчик и объект для ответа
 		i = 0
-		result = {}
+		result = []
 
 		# Цикл для обработки всех фанфиков
 		while (i < limit):
@@ -111,26 +111,26 @@ def handler():
 			temp = parsedFic
 
 			# Предопределяем атрибут "title" заранее, в противном случае получим KeyError
-			result[i] = {"title": {}}
+			fic = {"id": 0}
 			
-			result[i]["id"] = re.sub(r"\?.+$", "", temp[int(i)].find("a", attrs={'href' : re.compile("/readfic/")})['href'].replace("/readfic/", ""))
+			fic["id"] = int(re.sub(r"\?.+$", "", temp[int(i)].find("a", attrs={'href' : re.compile("/readfic/")})['href'].replace("/readfic/", "")))
 			
 			if "title" in scopes:
 				a = temp[int(i)].find("a", attrs={'href' : re.compile("/readfic/")})
 				# Запихиваем информацию в JSON объект
-				result[i]["title"] = a.get_text().strip()
-			else: del result[i]["title"]
+				fic["title"] = a.get_text().strip()
 			
 			if "author" in scopes:
 				a = temp[int(i)].find("a", attrs={'href' : re.compile("/authors/")})
 				# Запихиваем информацию в JSON объект
-				result[i]["author"] = re.sub(r"\?.+$", "", a['href'].replace("/authors/", ""))
+				fic["author"] = int(re.sub(r"\?.+$", "", a['href'].replace("/authors/", "")))
 			
 			if "description" in scopes:
 				d = temp[int(i)].find("div", attrs={'class' : "wrap word-break urlize fanfic-description-text"})
 				# Запихиваем информацию в JSON объект
-				result[i]["description"] = d.get_text().strip()
+				fic["description"] = d.get_text().strip()
 			
+			result.append(fic)
 			i += 1
 
 		'''
