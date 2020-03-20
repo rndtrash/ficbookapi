@@ -19,6 +19,8 @@ def handler():
 		requestID = xd.requests + 1
 		xd.requests += 1
 		print("[{}] Working on {}'s request...".format(requestID, request.environ.get('REMOTE_ADDR')))
+
+		response.content_type='application/json; charset=UTF-8'
 		
 		ficId = request.query.id
 		if not ficId:
@@ -46,8 +48,6 @@ def handler():
 		soup = BeautifulSoup(page.text, "html.parser")
 
 		print("[{}] Cheking for thread here...".format(requestID))
-
-		response.content_type='application/json; charset=UTF-8'
 
 		if (soup.find_all(name="h1",text="404 — Страница не найдена")):
 			print("[{}] Page is not found! Aborting...".format(requestID))
