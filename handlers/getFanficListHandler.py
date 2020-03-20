@@ -28,8 +28,10 @@ def handler():
 		pageId = request.query.page
 		if not pageId:
 			pageId = 1
-		if pageId < 1:
-			pageId = 1
+		else:
+			pageId = int(pageId)
+			if pageId < 1:
+				pageId = 1
 		
 		direction = request.query.direction
 		if not direction:
@@ -52,6 +54,10 @@ def handler():
 			limit = 0
 		else:
 			limit = int(limit)
+			if limit < 0:
+				limit = 0
+			elif limit > 20:
+				limit = 20
 		
 		scopes = request.query.scope
 		
@@ -92,10 +98,7 @@ def handler():
 
 		# Ограничиваем лимит и номер фанфика до 20
 		# Если лимит не указан, то парсим все сообщения на странице
-		if (limit > 20):
-		    self.write("Too big limit, biggest is 20")
-		    return
-		elif not limit:
+		if not limit:
 		    limit = len(parsedFic)
 
 		# Счетчик и объект для ответа
