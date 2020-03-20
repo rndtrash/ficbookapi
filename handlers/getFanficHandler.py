@@ -28,14 +28,14 @@ def handler():
 			
 		pageId = request.query.page
 		if not pageId:
-			pageId = 0
+			pageId = -1
 		else:
 			pageId = int(pageId)
 		
 		scopes = request.query.scope
 
 		url = None
-		if (pageId == 0):
+		if (pageId == -1):
 			url = ficSnippet.format(xd.sitePath, xd.ficPath, ficId)
 		else:
 			url = ficPageSnippet.format(xd.sitePath, xd.ficPath, ficId, pageId)
@@ -69,12 +69,13 @@ def handler():
 				result["page_title"] = soup.find(name="h2").get_text()
 		else:
 			pages = soup.find(name="ul", attrs={'class' : 'list-unstyled table-of-contents'}).find_all(name="a")
-			result["pages"] = {}
-			for i, page in enumerate(pages):
-				result["pages"][i] = {"id": ''}
-				result["pages"][i]["id"] = re.sub(r"#.+$", "", page['href'].replace("/readfic/{}/".format(ficId), ""))
+			result["pages"] = []
+			for page in pages:
+				p = {"id": 0}
+				p["id"] = int(re.sub(r"#.+$", "", page['href'].replace("/readfic/{}/".format(ficId), "")))
 				if "page_title" in scopes:
-					result["pages"][i]["title"] = page.get_text()
+					p["title"] = page.get_text()
+				result["pages"].append(p)
 		
 		temp = soup.find(name="section", attrs={'class' : re.compile("fanfiction-hat")})
 		if "title" in scopes:
