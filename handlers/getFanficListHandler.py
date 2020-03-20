@@ -8,7 +8,7 @@ from bottle import route, request, response
 import json
 import time
 
-ficFindPageSnipper = "http://{}/{}?p={}{}{}&filterDirection={}&rating={}&size={}&find=Найти!"
+ficFindPageSnipper = "http://{}/{}?p={}&fandom_filter={}{}{}&filterDirection={}&rating={}&size={}&find=Найти!"
 
 @route("/get/fanfics", method="GET")
 def handler():
@@ -16,7 +16,9 @@ def handler():
 		requestID = xd.requests + 1
 		xd.requests += 1
 		print("[{}] Working on {}'s request...".format(requestID, request.environ.get('REMOTE_ADDR')))
-			
+		
+		fandom_filter = request.query.fandom_filter
+		
 		fandomIds = request.query.fandoms
 		
 		tagIds = request.query.tags
@@ -51,18 +53,20 @@ def handler():
 		
 		scopes = request.query.scope
 		
-		if (len(tagIds) == 0 and len(fandomIds) == 0):
-			return pretty({"error": {"message": "Please set fandoms or tags"}})
+		if (not fandom_filter and not tagIds and not fandomIds):
+			return pretty({"error": {"message": "Please set fandom filter, fandoms or tags"}})
 		
 		fandomsString = ""
-		for x in fandomIds.split(','):
-			fandomsString += "&fandom_ids[]={}".format(x)
+		if (len(fandomIds) != 0):
+			for x in fandomIds.split(','):
+				fandomsString += "&fandom_ids[]={}".format(x)
 
 		tagsString = ""
-		for x in tagIds.split(','):
-			tagsString += "&tags_include[]={}".format(x)
+		if (len(tagIds) != 0):
+			for x in tagIds.split(','):
+				tagsString += "&tags_include[]={}".format(x)
 		
-		url = ficFindPageSnipper.format(xd.sitePath, xd.ficFindPath, pageId, fandomsString, tagsString, direction, rating, size)
+		url = ficFindPageSnipper.format(xd.sitePath, xd.ficFindPath, pageId, fandom_filter, fandomsString, tagsString, direction, rating, size)
 		
 		page = requests.get(url)
 
