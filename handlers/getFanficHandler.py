@@ -56,6 +56,10 @@ def handler():
 		if (soup.find_all(name="h1",text="500 — Ошибка на сервере")):
 			print("[{}] Unknown error! Aborting...".format(requestID))
 			return pretty({"error": {"message": "Unknown error"}})
+		
+		if (soup.find_all(name="h1",text="Работа удалена")):
+			print("[{}] This fanfic was deleted.".format(requestID))
+			return pretty({"error": {"message": "This fanfic was deleted."}})
 
 		# Объект для ответа
 		result = {}
